@@ -261,16 +261,56 @@ resource "aws_apigatewayv2_integration" "presign_api_integration" {
   payload_format_version = "2.0"
 }
 
+resource "aws_apigatewayv2_integration" "cors_options_integration" {
+  api_id             = aws_apigatewayv2_api.presign_api.id
+  integration_type   = "MOCK"
+  integration_method = "OPTIONS"
+  payload_format_version = "1.0"
+  request_templates = {
+    "application/json" = <<EOF
+{
+  "statusCode": 200
+}
+EOF
+  }
+}
+
 resource "aws_apigatewayv2_route" "presign_route" {
   api_id    = aws_apigatewayv2_api.presign_api.id
   route_key = "POST /generate-presigned-url"
   target    = "integrations/${aws_apigatewayv2_integration.presign_api_integration.id}"
 }
 
+resource "aws_apigatewayv2_route" "cors_options_route" {
+  api_id    = aws_apigatewayv2_api.presign_api.id
+  route_key = "OPTIONS /generate-presigned-url"
+  target    = "integrations/${aws_apigatewayv2_integration.cors_options_integration.id}"
+}
+
+resource "aws_cloudwatch_log_group" "apigw_logs" {
+  name              = "/aws/apigateway/presign-api"
+  retention_in_days = 7
+}
+
 resource "aws_apigatewayv2_stage" "presign_stage" {
   api_id      = aws_apigatewayv2_api.presign_api.id
   name        = "$default"
   auto_deploy = true
+
+  default_route_settings {
+    data_trace_enabled = true
+  }
+
+  access_log_settings {
+    destination_arn = aws_cloudwatch_log_group.apigw_logs.arn
+    format = jsonencode({
+      requestId      = "$context.requestId",
+      requestTime    = "$context.requestTime",
+      httpMethod     = "$context.httpMethod",
+      path           = "$context.path",
+      status         = "$context.status"
+    })
+  }
 }
 
 resource "aws_lambda_permission" "allow_apigw_invoke_presign" {
