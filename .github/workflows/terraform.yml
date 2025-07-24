@@ -35,8 +35,9 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Terraform Init
-        run: terraform init
+      - name: Terraform Init (Reconfigure)
+        run: terraform init -reconfigure
+
 
       - name: Terraform Plan
         run: terraform plan
