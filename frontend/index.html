@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DevOps Accelerator Platform by Mohammad Anees Alam</title>
+</head>
+<body>
+  <h1>Welcome to DevOps Mentorship Program - A place for aspiring devops engineers!</h1>
+  <p>Upload your payment screenshot below:</p>
+
+  <form id="uploadForm">
+    <input type="file" id="screenshot" />
+    <button type="submit">Upload</button>
+  </form>
+
+  <p id="responseMsg"></p>
+
+  <script>
+    const form = document.getElementById("uploadForm");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const fileInput = document.getElementById("screenshot");
+      const file = fileInput.files[0];
+
+      if (!file) {
+        alert("Please select a file");
+        return;
+      }
+
+      const filename = file.name;
+      const contentType = file.type;
+
+      try {
+        // Replace with your actual API Gateway URL after first Terraform apply
+        const apiUrl = "https://<TO_BE_REPLACED>/generate-presigned-url";
+
+        // STEP 1: Get Presigned URL
+        const presignResponse = await fetch(apiUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            filename: filename,
+            contentType: contentType
+          })
+        });
+
+        const presignData = await presignResponse.json();
+
+        if (!presignResponse.ok) {
+          throw new Error(presignData.message || "Failed to get presigned URL");
+        }
+
+        const uploadUrl = presignData.uploadUrl;
+
+        // STEP 2: Upload to S3
+        const uploadResponse = await fetch(uploadUrl, {
+          method: "PUT",
+          headers: {
+            "Content-Type": contentType
+          },
+          body: file
+        });
+
+        if (!uploadResponse.ok) {
+          throw new Error("File upload failed");
+        }
+
+        document.getElementById("responseMsg").textContent = "File uploaded successfully!";
+      } catch (error) {
+        console.error(error);
+        document.getElementById("responseMsg").textContent = "Upload failed: " + error.message;
+      }
+    });
+  </script>
+</body>
+</html>
