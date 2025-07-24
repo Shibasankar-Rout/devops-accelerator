@@ -1,0 +1,45 @@
+# ----------------------------------------
+# Terraform
+# ----------------------------------------
+.terraform/                      # Terraform cache directory
+*.tfstate                       # Local state files
+*.tfstate.backup                # State backup files
+*.tfstate.*                     # State lock or variations
+
+# Lock file: keep this unless you're managing multiple provider versions manually
+# If working in teams or CI/CD, commit it for consistency
+# Uncomment below only if you know what you're doing
+# .terraform.lock.hcl
+
+# ----------------------------------------
+# Lambda artifacts
+# ----------------------------------------
+*.zip                           # Exclude all zip files (lambda packages)
+# OR use specific folders if you want to keep other zips
+# backend/lambda/**/lambda.zip
+
+# ----------------------------------------
+# Mac system files
+# ----------------------------------------
+.DS_Store                       # Prevent macOS metadata from being pushed
+
+# ----------------------------------------
+# Python cache
+# ----------------------------------------
+__pycache__/
+*.pyc
+
+# ----------------------------------------
+# VSCode config
+# ----------------------------------------
+.vscode/
+
+# ----------------------------------------
+# Git folder (already ignored by Git itself, but for completeness)
+.git/
+
+# ----------------------------------------
+# Node/npm (in case gigs get JS-based tools later)
+node_modules/
+dist/
+
