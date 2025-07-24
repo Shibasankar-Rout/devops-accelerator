@@ -1,26 +1,67 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>DevOps Accelerator Platform by Mohammad Anees Alam</title>
-</head>
-<body>
-  <h1>Welcome to DevOps Mentorship Program - A forum for aspiring DevOps Engineers!</h1>
-  <p>Upload your payment screenshot below:</p>
-
-  <form id="uploadForm">
-    <input type="file" id="screenshot" />
-    <button type="submit">Upload</button>
-  </form>
-
-  <p id="responseMsg"></p>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DevOps Mentorship by Mohammad Anees Alam</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    const form = document.getElementById("uploadForm");
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'devops-blue': '#1e3a8a',
+            'devops-dark': '#1f2937',
+            'devops-green': '#10b981',
+            'devops-light': '#f8fafc'
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-devops-light">
+  <!-- Navigation -->
+  <!-- ... KEEP YOUR EXISTING NAV, HERO, SECTIONS UNCHANGED ... -->
 
-    form.addEventListener("submit", async (e) => {
+  <!-- Replace only Upload Screenshot section's content with enhanced working version below -->
+
+  <!-- Upload Screenshot Section -->
+  <section id="upload" class="py-16 bg-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold text-devops-dark mb-4">Upload Payment Screenshot</h2>
+        <p class="text-gray-600 text-lg">Upload your payment confirmation to get started with your mentorship</p>
+      </div>
+      <div class="bg-gray-50 p-8 rounded-xl shadow-lg">
+        <form id="upload-form" class="space-y-6">
+          <div>
+            <label class="block text-sm font-medium text-devops-dark mb-2">Upload File</label>
+            <input type="file" id="file-input" accept=".jpg,.jpeg,.png,.pdf"
+              class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-devops-green file:text-white hover:file:bg-green-600">
+          </div>
+
+          <div>
+            <p id="upload-status" class="text-sm text-gray-600"></p>
+          </div>
+
+          <button type="submit"
+            class="w-full bg-devops-green text-white py-3 px-6 rounded-lg text-lg font-semibold hover:bg-green-600 transition-colors">
+            <i class="fas fa-upload mr-2"></i>Upload Screenshot
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Add JS logic -->
+  <script>
+    document.getElementById("upload-form").addEventListener("submit", async function (e) {
       e.preventDefault();
 
-      const fileInput = document.getElementById("screenshot");
+      const fileInput = document.getElementById("file-input");
+      const status = document.getElementById("upload-status");
       const file = fileInput.files[0];
 
       if (!file) {
@@ -32,46 +73,44 @@
       const contentType = file.type;
 
       try {
-        // ✅ Updated with actual API Gateway URL
         const apiUrl = "https://0jwmlx4c0a.execute-api.us-east-1.amazonaws.com/generate-presigned-url";
 
-        // STEP 1: Get Presigned URL
-        const presignResponse = await fetch(apiUrl, {
+        // Step 1: Get presigned URL
+        const presignRes = await fetch(apiUrl, {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
           },
-          body: JSON.stringify({
-            filename: filename,
-            contentType: contentType
-          })
+          body: JSON.stringify({ filename, contentType })
         });
 
-        const presignData = await presignResponse.json();
+        const presignData = await presignRes.json();
 
-        if (!presignResponse.ok) {
+        if (!presignRes.ok) {
           throw new Error(presignData.message || "Failed to get presigned URL");
         }
 
         const uploadUrl = presignData.uploadUrl;
 
-        // STEP 2: Upload to S3
-        const uploadResponse = await fetch(uploadUrl, {
+        // Step 2: Upload to S3 using presigned URL
+        const uploadRes = await fetch(uploadUrl, {
           method: "PUT",
-          headers: {
-            "Content-Type": contentType
-          },
+          headers: { "Content-Type": contentType },
           body: file
         });
 
-        if (!uploadResponse.ok) {
+        if (!uploadRes.ok) {
           throw new Error("File upload failed");
         }
 
-        document.getElementById("responseMsg").textContent = "File uploaded successfully!";
-      } catch (error) {
-        console.error(error);
-        document.getElementById("responseMsg").textContent = "Upload failed: " + error.message;
+        status.classList.remove("text-red-500");
+        status.classList.add("text-green-600");
+        status.textContent = "✅ File uploaded successfully!";
+      } catch (err) {
+        console.error(err);
+        status.classList.remove("text-green-600");
+        status.classList.add("text-red-500");
+        status.textContent = "❌ Upload failed: " + err.message;
       }
     });
   </script>
