@@ -1,13 +1,11 @@
 terraform {
   required_version = ">= 1.5.0"
 
-# Verify these backend resources setup in AWS before running "terraform init"
-
   backend "s3" {
-    bucket         = "devops-accelerator-platform-tf-state"   
+    bucket         = "devops-accelerator-platform-tf-state"
     key            = "global/devops-accelerator/terraform.tfstate"
     region         = "us-east-1"
-    dynamodb_table = "devops-accelerator-tf-locker"                    
+    dynamodb_table = "devops-accelerator-tf-locker"
     encrypt        = true
   }
 }
@@ -44,8 +42,8 @@ resource "aws_iam_role_policy_attachment" "s3_access" {
 }
 
 resource "aws_s3_bucket" "upload_bucket" {
-  bucket         = var.upload_bucket_name
-  force_destroy  = true
+  bucket        = var.upload_bucket_name
+  force_destroy = true
 }
 
 resource "aws_lambda_function" "process_uploaded_file" {
@@ -53,9 +51,7 @@ resource "aws_lambda_function" "process_uploaded_file" {
   runtime       = "python3.11"
   handler       = "main.lambda_handler"
   filename      = "${path.module}/../../backend/lambda/process-uploaded-file/lambda.zip"
-
   source_code_hash = filebase64sha256("${path.module}/../../backend/lambda/process-uploaded-file/lambda.zip")
-
   role = aws_iam_role.lambda_exec_role.arn
 
   environment {
@@ -102,6 +98,18 @@ resource "aws_s3_bucket_public_access_block" "frontend_bucket_public_access" {
   restrict_public_buckets = false
 }
 
+resource "aws_s3_bucket_cors_configuration" "frontend_cors" {
+  bucket = aws_s3_bucket.frontend_bucket.id
+
+  cors_rule {
+    allowed_headers = ["*"]
+    allowed_methods = ["GET", "PUT", "HEAD"]
+    allowed_origins = ["https://${aws_cloudfront_distribution.frontend_distribution.domain_name}"]
+    expose_headers  = []
+    max_age_seconds = 3000
+  }
+}
+
 resource "aws_s3_bucket_website_configuration" "frontend_bucket_website" {
   bucket = aws_s3_bucket.frontend_bucket.id
 
@@ -137,7 +145,7 @@ resource "aws_cloudfront_distribution" "frontend_distribution" {
   price_class         = var.cloudfront_price_class
 
   origin {
-    domain_name = aws_s3_bucket.frontend_bucket.website_endpoint
+    domain_name = aws_s3_bucket_website_configuration.frontend_bucket_website.website_endpoint
     origin_id   = "S3-Frontend-Origin"
 
     custom_origin_config {
@@ -180,7 +188,6 @@ resource "aws_cloudfront_distribution" "frontend_distribution" {
   depends_on = [aws_s3_bucket_policy.frontend_bucket_policy]
 }
 
-# Lambda IAM Role for presign generator
 resource "aws_iam_role" "presign_lambda_role" {
   name = "DevOps-Accelerator-Presign-Lambda-Role"
   assume_role_policy = jsonencode({
@@ -226,7 +233,6 @@ resource "aws_iam_role_policy_attachment" "presign_lambda_attach" {
   policy_arn = aws_iam_policy.presign_lambda_policy.arn
 }
 
-# Lambda Function
 resource "aws_lambda_function" "presign_lambda" {
   function_name = "DevOps-Accelerator-Presign-Handler"
   role          = aws_iam_role.presign_lambda_role.arn
@@ -242,7 +248,6 @@ resource "aws_lambda_function" "presign_lambda" {
   }
 }
 
-# API Gateway
 resource "aws_apigatewayv2_api" "presign_api" {
   name          = "DevOps-Accelerator-Presign-API"
   protocol_type = "HTTP"

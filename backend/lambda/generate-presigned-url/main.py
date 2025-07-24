@@ -7,6 +7,18 @@ s3 = boto3.client("s3")
 BUCKET_NAME = os.environ["BUCKET_NAME"]
 
 def lambda_handler(event, context):
+    # Handle CORS preflight request
+    if event.get("httpMethod") == "OPTIONS":
+        return {
+            "statusCode": 200,
+            "headers": {
+                "Access-Control-Allow-Origin": "https://d246o7opnvxl8.cloudfront.net",
+                "Access-Control-Allow-Headers": "*",
+                "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+            },
+            "body": json.dumps("CORS preflight success")
+        }
+
     try:
         body = json.loads(event["body"])
         filename = body.get("filename")
@@ -15,6 +27,11 @@ def lambda_handler(event, context):
         if not filename or not content_type:
             return {
                 "statusCode": 400,
+                "headers": {
+                    "Access-Control-Allow-Origin": "https://d246o7opnvxl8.cloudfront.net",
+                    "Access-Control-Allow-Headers": "*",
+                    "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+                },
                 "body": json.dumps({"message": "Missing filename or contentType"})
             }
 
@@ -32,12 +49,21 @@ def lambda_handler(event, context):
 
         return {
             "statusCode": 200,
+            "headers": {
+                "Access-Control-Allow-Origin": "https://d246o7opnvxl8.cloudfront.net",
+                "Access-Control-Allow-Headers": "*",
+                "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+            },
             "body": json.dumps({"uploadUrl": presigned_url, "key": key})
         }
 
     except Exception as e:
         return {
             "statusCode": 500,
+            "headers": {
+                "Access-Control-Allow-Origin": "https://d246o7opnvxl8.cloudfront.net",
+                "Access-Control-Allow-Headers": "*",
+                "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+            },
             "body": json.dumps({"message": "Error generating URL", "error": str(e)})
         }
-
