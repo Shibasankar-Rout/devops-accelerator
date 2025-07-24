@@ -261,20 +261,6 @@ resource "aws_apigatewayv2_integration" "presign_api_integration" {
   payload_format_version = "2.0"
 }
 
-resource "aws_apigatewayv2_integration" "cors_options_integration" {
-  api_id             = aws_apigatewayv2_api.presign_api.id
-  integration_type   = "MOCK"
-  integration_method = "OPTIONS"
-  payload_format_version = "1.0"
-  request_templates = {
-    "application/json" = <<EOF
-{
-  "statusCode": 200
-}
-EOF
-  }
-}
-
 resource "aws_apigatewayv2_route" "presign_route" {
   api_id    = aws_apigatewayv2_api.presign_api.id
   route_key = "POST /generate-presigned-url"
@@ -284,7 +270,7 @@ resource "aws_apigatewayv2_route" "presign_route" {
 resource "aws_apigatewayv2_route" "cors_options_route" {
   api_id    = aws_apigatewayv2_api.presign_api.id
   route_key = "OPTIONS /generate-presigned-url"
-  target    = "integrations/${aws_apigatewayv2_integration.cors_options_integration.id}"
+  target    = "integrations/${aws_apigatewayv2_integration.presign_api_integration.id}"
 }
 
 resource "aws_cloudwatch_log_group" "apigw_logs" {
