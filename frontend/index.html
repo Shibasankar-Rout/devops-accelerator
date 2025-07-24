@@ -32,8 +32,8 @@
       const contentType = file.type;
 
       try {
-        // Replace with your actual API Gateway URL after first Terraform apply
-        const apiUrl = "https://<TO_BE_REPLACED>/generate-presigned-url";
+        // ✅ Updated with actual API Gateway URL
+        const apiUrl = "https://0jwmlx4c0a.execute-api.us-east-1.amazonaws.com/generate-presigned-url";
 
         // STEP 1: Get Presigned URL
         const presignResponse = await fetch(apiUrl, {
