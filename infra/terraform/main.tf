@@ -91,6 +91,14 @@ resource "aws_s3_bucket" "frontend_bucket" {
   tags = {
     Name = "Frontend Hosting Bucket"
   }
+
+  # This allows public access
+  public_access_block {
+    block_public_acls       = false
+    block_public_policy     = false
+    ignore_public_acls      = false
+    restrict_public_buckets = false
+  }
 }
 
 resource "aws_s3_bucket_website_configuration" "frontend_bucket_website" {
