@@ -23,6 +23,12 @@ def lambda_handler(event, context):
         body = json.loads(event["body"])
         filename = body.get("filename")
         content_type = body.get("contentType")
+        full_name = body.get("fullName")
+        email = body.get("email")
+        notes = body.get("notes")
+
+        # Log or process these fields as needed
+        print(f"Received upload from: {full_name} ({email}), Notes: {notes}")
 
         if not filename or not content_type:
             return {
