@@ -12,7 +12,7 @@ def lambda_handler(event, context):
         return {
             "statusCode": 200,
             "headers": {
-                "Access-Control-Allow-Origin": "https://d246o7opnvxl8.cloudfront.net",
+                "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Headers": "*",
                 "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
             },
@@ -28,7 +28,7 @@ def lambda_handler(event, context):
             return {
                 "statusCode": 400,
                 "headers": {
-                    "Access-Control-Allow-Origin": "https://d246o7opnvxl8.cloudfront.net",
+                    "Access-Control-Allow-Origin": "*",
                     "Access-Control-Allow-Headers": "*",
                     "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
                 },
@@ -50,7 +50,7 @@ def lambda_handler(event, context):
         return {
             "statusCode": 200,
             "headers": {
-                "Access-Control-Allow-Origin": "https://d246o7opnvxl8.cloudfront.net",
+                "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Headers": "*",
                 "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
             },
@@ -61,7 +61,7 @@ def lambda_handler(event, context):
         return {
             "statusCode": 500,
             "headers": {
-                "Access-Control-Allow-Origin": "https://d246o7opnvxl8.cloudfront.net",
+                "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Headers": "*",
                 "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
             },

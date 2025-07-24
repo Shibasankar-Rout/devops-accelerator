@@ -251,6 +251,12 @@ resource "aws_lambda_function" "presign_lambda" {
 resource "aws_apigatewayv2_api" "presign_api" {
   name          = "DevOps-Accelerator-Presign-API"
   protocol_type = "HTTP"
+
+  cors_configuration {
+    allow_origins = ["*"]
+    allow_methods = ["OPTIONS", "POST"]
+    allow_headers = ["content-type"]
+  }
 }
 
 resource "aws_apigatewayv2_integration" "presign_api_integration" {
@@ -264,12 +270,6 @@ resource "aws_apigatewayv2_integration" "presign_api_integration" {
 resource "aws_apigatewayv2_route" "presign_route" {
   api_id    = aws_apigatewayv2_api.presign_api.id
   route_key = "POST /generate-presigned-url"
-  target    = "integrations/${aws_apigatewayv2_integration.presign_api_integration.id}"
-}
-
-resource "aws_apigatewayv2_route" "cors_options_route" {
-  api_id    = aws_apigatewayv2_api.presign_api.id
-  route_key = "OPTIONS /generate-presigned-url"
   target    = "integrations/${aws_apigatewayv2_integration.presign_api_integration.id}"
 }
 
