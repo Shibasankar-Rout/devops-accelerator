@@ -416,10 +416,10 @@
         return;
       }
       uploadedFile = file;
-      // Show file name
+      // Show file name (no success yet)
       fileName.textContent = file.name;
-      uploadContent.classList.add('hidden');
-      uploadSuccess.classList.remove('hidden');
+      uploadContent.classList.remove('hidden');
+      uploadSuccess.classList.add('hidden');
     }
 
     // Form submission logic
@@ -466,11 +466,9 @@
         // Step 2: Upload to S3 using presigned URL with progress
         await uploadFileWithProgress(uploadUrl, uploadedFile, uploadedFile.type);
 
-        // After successful upload
         uploadProgress.classList.add('hidden');
         uploadSuccess.classList.remove('hidden');
         fileName.textContent = uploadedFile.name;
-        // Only now reset uploadedFile
         uploadedFile = null;
 
         // Show success

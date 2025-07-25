@@ -1,14 +1,18 @@
 import boto3
 import logging
 import os
+from datetime import datetime
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 ALLOWED_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.pdf']
 
-# Fetch bucket name from env variable
+# Fetch from environment variables
 UPLOAD_BUCKET = os.environ.get('UPLOAD_BUCKET')
+SNS_TOPIC_ARN = os.environ.get('SNS_TOPIC_ARN')
+
+sns = boto3.client('sns')
 
 def lambda_handler(event, context):
     s3 = boto3.client('s3')
@@ -33,7 +37,24 @@ def lambda_handler(event, context):
             'body': f"Unsupported file type uploaded: {object_key}"
         }
 
-    logger.info(f"Valid screenshot received: {object_key}")
+    # Timestamp
+    timestamp = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')
+    logger.info(f"Valid screenshot received: {object_key} at {timestamp}")
+
+    # Send SNS notification
+    message = f"A file has been uploaded:\n\nFile: {object_key}\nTime: {timestamp}\nBucket: {bucket_name}"
+    subject = "DevOps Accelerator - New File Uploaded"
+
+    try:
+        sns.publish(
+            TopicArn=SNS_TOPIC_ARN,
+            Message=message,
+            Subject=subject
+        )
+        logger.info("SNS notification sent successfully.")
+    except Exception as e:
+        logger.error(f"Failed to send SNS notification: {e}")
+
     return {
         'statusCode': 200,
         'body': f"File {object_key} processed successfully."
