@@ -71,7 +71,7 @@
         </div>
         <p class="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
           Master DevOps with personalized mentorship from Mohammad Anees Alam.<br>
-          Learn industry best practices through hands-on projects, real-world scenarios, and expert guidance.
+          Learn industry best practices through hands-on projects, real-world scenarios, and expert guidance.<br>
           Transform your career with practical DevOps skills.
         </p>
       </div>
@@ -394,7 +394,7 @@
       progressText.textContent = '0%';
       fileName.textContent = '';
       errorMessage.textContent = '';
-      uploadedFile = null;
+      // Do NOT reset uploadedFile here!
     }
 
     function handleFile(file) {
@@ -420,6 +420,7 @@
       fileName.textContent = file.name;
       uploadContent.classList.remove('hidden');
       uploadSuccess.classList.add('hidden');
+      uploadError.classList.add('hidden');
     }
 
     // Form submission logic
@@ -465,11 +466,6 @@
 
         // Step 2: Upload to S3 using presigned URL with progress
         await uploadFileWithProgress(uploadUrl, uploadedFile, uploadedFile.type);
-
-        uploadProgress.classList.add('hidden');
-        uploadSuccess.classList.remove('hidden');
-        fileName.textContent = file.name;
-        uploadedFile = null;
 
         // Show success
         uploadProgress.classList.add('hidden');
