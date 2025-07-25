@@ -262,15 +262,24 @@
   </section>
 
   <!-- Bot UI Section -->
-  <div id="career-bot" style="margin-top: 50px;">
-    <h2 style="text-align:center;">👨‍💻 Career Guidance Bot</h2>
-    <div style="display: flex; justify-content: center; gap: 20px; margin-top: 20px;">
-      <button onclick="showBotInfo('student')">🎓 Students</button>
-      <button onclick="showBotInfo('nonit')">🧑‍🔧 Non-IT Professionals</button>
-      <button onclick="showBotInfo('it')">💼 IT Background</button>
+  <div id="career-bot" style="
+    max-width: 700px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    text-align: center;
+  ">
+    <h2 style="margin-bottom: 20px;">💼 Career Guidance Bot</h2>
+
+    <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+      <button onclick="showBotInfo('student')" style="padding: 10px 20px; border: none; border-radius: 6px; background-color: #f0f0f0; cursor: pointer;">🎓 Students</button>
+      <button onclick="showBotInfo('nonit')" style="padding: 10px 20px; border: none; border-radius: 6px; background-color: #f0f0f0; cursor: pointer;">🧑‍🔧 Non-IT Professionals</button>
+      <button onclick="showBotInfo('it')" style="padding: 10px 20px; border: none; border-radius: 6px; background-color: #f0f0f0; cursor: pointer;">💼 IT Background</button>
     </div>
 
-    <div id="bot-response" style="margin-top: 30px; max-width: 600px; margin-left: auto; margin-right: auto; font-size: 16px;"></div>
+    <div id="bot-response" style="margin-top: 30px; text-align: left; font-size: 16px;"></div>
   </div>
 
 
@@ -548,19 +557,19 @@
 
       if (userType === 'student') {
         response = `
-          <h3>For Students 👩‍🎓</h3>
+          <h3>For Students </h3>
           <p><strong>Relevant Skillset:</strong> Beginner-friendly curriculum. No background in IT needed.</p>
           <p><strong>Programming Knowledge:</strong> Having prior knowledge in Bash or Python is beneficial, but we teach from scratch.</p>
         `;
       } else if (userType === 'nonit') {
         response = `
-          <h3>For Non-IT Professionals 🧑‍🔧</h3>
+          <h3>For Non-IT Professionals </h3>
           <p><strong>Relevant Skillset:</strong> This course is tailored for career transitions. It starts with the basics.</p>
           <p><strong>Programming Knowledge:</strong> Prior experience is helpful but not required — we guide you through everything.</p>
         `;
       } else if (userType === 'it') {
         response = `
-          <h3>For IT Professionals 💼</h3>
+          <h3>For IT Professionals </h3>
           <p><strong>Relevant Skillset:</strong> Advanced modules available to upskill and transition to DevOps roles.</p>
           <p><strong>Programming Knowledge:</strong> Bash, Python, and scripting knowledge will help you fast-track your learning.</p>
         `;
