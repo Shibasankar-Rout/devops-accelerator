@@ -416,10 +416,10 @@
         return;
       }
       uploadedFile = file;
-      // Show file name (no success yet)
+      // Show file name immediately
       fileName.textContent = file.name;
       uploadContent.classList.remove('hidden');
-      uploadSuccess.classList.add('hidden');
+      uploadSuccess.classList.add('hidden'); // Hide success until upload
       uploadError.classList.add('hidden');
     }
 
@@ -469,7 +469,7 @@
 
         // Show success
         uploadProgress.classList.add('hidden');
-        uploadSuccess.classList.remove('hidden');
+        uploadSuccess.classList.remove('hidden'); // Show success after upload
         fileName.textContent = uploadedFile.name;
         uploadedFile = null;
         // Optionally, reset form fields
