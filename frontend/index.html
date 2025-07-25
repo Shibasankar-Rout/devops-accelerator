@@ -201,6 +201,27 @@
     </div>
   </section>
 
+  <!-- Bot UI Section -->
+  <div id="career-bot" class="max-w-3xl mx-auto my-12 p-8 bg-white rounded-xl shadow-lg text-center">
+    <h2 class="text-3xl md:text-4xl font-bold text-devops-dark mb-6">
+      Not Sure Where to Start? Let Us Guide Your Tech Career
+    </h2>
+
+    <div class="flex justify-center flex-wrap gap-4">
+      <button onclick="showBotInfo('student')" class="px-6 py-3 rounded-md bg-gray-100 hover:bg-gray-200 transition duration-200">
+        🎓 Student
+      </button>
+      <button onclick="showBotInfo('nonit')" class="px-6 py-3 rounded-md bg-gray-100 hover:bg-gray-200 transition duration-200">
+        🧑‍🔧 Non-IT Professional
+      </button>
+      <button onclick="showBotInfo('it')" class="px-6 py-3 rounded-md bg-gray-100 hover:bg-gray-200 transition duration-200">
+        💼 IT Background
+      </button>
+    </div>
+
+    <div id="bot-response" class="mt-8 text-left text-base leading-relaxed"></div>
+  </div>
+
 
   <!-- Upload Screenshot Section (Enhanced) -->
   <section id="upload" class="py-16 bg-white">
@@ -260,27 +281,6 @@
       </div>
     </div>
   </section>
-
-  <!-- Bot UI Section -->
-  <div id="career-bot" style="
-    max-width: 700px;
-    margin: 50px auto;
-    padding: 30px;
-    background-color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    text-align: center;
-  ">
-    <h2 style="margin-bottom: 20px;">💼 Career Guidance Bot</h2>
-
-    <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
-      <button onclick="showBotInfo('student')" style="padding: 10px 20px; border: none; border-radius: 6px; background-color: #f0f0f0; cursor: pointer;">🎓 Students</button>
-      <button onclick="showBotInfo('nonit')" style="padding: 10px 20px; border: none; border-radius: 6px; background-color: #f0f0f0; cursor: pointer;">🧑‍🔧 Non-IT Professionals</button>
-      <button onclick="showBotInfo('it')" style="padding: 10px 20px; border: none; border-radius: 6px; background-color: #f0f0f0; cursor: pointer;">💼 IT Background</button>
-    </div>
-
-    <div id="bot-response" style="margin-top: 30px; text-align: left; font-size: 16px;"></div>
-  </div>
 
 
   <!-- Smart Tools Section -->
