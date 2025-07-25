@@ -18,3 +18,8 @@ variable "cloudfront_price_class" {
   type        = string
   default     = "PriceClass_100"
 }
+
+variable "notification_email" {
+  description = "Email address to receive file upload notifications"
+  type        = string
+}
