@@ -201,6 +201,7 @@
     </div>
   </section>
 
+
   <!-- Upload Screenshot Section (Enhanced) -->
   <section id="upload" class="py-16 bg-white">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -227,6 +228,8 @@
                 <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-4"></i>
                 <p class="text-gray-600 mb-2">Click to upload or drag and drop</p>
                 <p class="text-sm text-gray-500">JPG, PNG, or PDF (max 10MB)</p>
+                <!-- Show selected file name here -->
+                <p class="text-sm text-gray-700 mt-2" id="selected-file-name" style="display:none;"></p>
               </div>
               <div id="upload-progress" class="hidden">
                 <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
@@ -338,7 +341,7 @@
     </div>
   </footer>
 
-  <!-- Scripts -->
+<!-- Scripts -->
   <script>
     // Mobile menu toggle
     const mobileMenuBtn = document.getElementById('mobile-menu-btn');
@@ -346,13 +349,6 @@
     mobileMenuBtn.addEventListener('click', () => {
       mobileMenu.classList.toggle('hidden');
     });
-
-    // Smooth scrolling
-    function scrollToSection(sectionId) {
-      document.getElementById(sectionId).scrollIntoView({
-        behavior: 'smooth'
-      });
-    }
 
     // Upload area logic
     const uploadArea = document.getElementById('upload-area');
@@ -365,6 +361,7 @@
     const progressText = document.getElementById('progress-text');
     const fileName = document.getElementById('file-name');
     const errorMessage = document.getElementById('error-message');
+    const selectedFileName = document.getElementById('selected-file-name');
     let uploadedFile = null;
 
     uploadArea.addEventListener('click', () => fileInput.click());
@@ -394,7 +391,8 @@
       progressText.textContent = '0%';
       fileName.textContent = '';
       errorMessage.textContent = '';
-      // Do NOT reset uploadedFile here!
+      selectedFileName.style.display = 'none';
+      selectedFileName.textContent = '';
     }
 
     function handleFile(file) {
@@ -407,17 +405,20 @@
         uploadContent.classList.add('hidden');
         uploadError.classList.remove('hidden');
         errorMessage.textContent = 'Please upload a JPG, PNG, or PDF file.';
+        selectedFileName.style.display = 'none';
         return;
       }
       if (file.size > maxSize) {
         uploadContent.classList.add('hidden');
         uploadError.classList.remove('hidden');
         errorMessage.textContent = 'File size must be less than 10MB.';
+        selectedFileName.style.display = 'none';
         return;
       }
       uploadedFile = file;
       // Show file name immediately
-      fileName.textContent = file.name;
+      selectedFileName.textContent = `File selected to upload is: ${file.name}`;
+      selectedFileName.style.display = 'block';
       uploadContent.classList.remove('hidden');
       uploadSuccess.classList.add('hidden'); // Hide success until upload
       uploadError.classList.add('hidden');
@@ -471,6 +472,7 @@
         uploadProgress.classList.add('hidden');
         uploadSuccess.classList.remove('hidden'); // Show success after upload
         fileName.textContent = uploadedFile.name;
+        selectedFileName.style.display = 'none';
         uploadedFile = null;
         // Optionally, reset form fields
         // document.getElementById('upload-form').reset();
