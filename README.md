@@ -35,7 +35,7 @@ This DevOps Accelerator enables users to
 |------------------|------------------------------------------|
 | Frontend         | HTML/CSS + S3 + CloudFront               |
 | Backend (Event)  | AWS Lambda (Python)              |
-| Infrastructure   | Terraform (modular setup)                |
+| Infrastructure   | Terraform (modular setup & remote backend)                |
 | CI/CD            | GitHub Actions (Workflows & Triggers)    |
 | Monitoring       | CloudWatch (Logs, Alarms, Dashboard)     |
 | Notification     | SNS (Email alerts for file uploads)      |
@@ -233,7 +233,7 @@ git clone git@github.com:Anees-DevOps/devops-accelerator.git .
 
 ---
 
-## 🛠️ Set Up GitHub Repository
+## Set Up GitHub Repository
 
 1. Create a new GitHub repo (do **not** initialize with README).
 2. Add your new repo as remote origin:
@@ -318,7 +318,7 @@ git push -u origin main
 
 ---
 
-## 🛠 Git Push Troubleshooting (File Size Errors)
+##  Git Push Troubleshooting (File Size Errors)
 
 If you hit a `.terraform/` size error:
 
