@@ -262,6 +262,9 @@ Go to:
 
 * Add `CLOUDFRONT_DIST_ID` (found in AWS → CloudFront → Distributions)
 
+#### Important Note:
+* S3 bucket names have to be *globally unique*, make sure to **change your bucket name while trying to pushing the changes** for the 1st time. Other services like lambda/cloudfront/dynamoDB etc can have same names if AWS account is different.
+
 ---
 
 ##  Prepare Lambda Deployments
