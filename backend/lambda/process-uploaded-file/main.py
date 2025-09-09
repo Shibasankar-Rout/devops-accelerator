@@ -65,3 +65,4 @@ def is_valid_file_type(key):
         if key.lower().endswith(ext):
             return True
     return False
+logger.info(f"Event received: {event}")
