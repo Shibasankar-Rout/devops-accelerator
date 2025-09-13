@@ -220,7 +220,7 @@ resource "aws_iam_policy" "presign_lambda_policy" {
       {
         Action = [
           "s3:PutObject",
-          "s3:GetObject"
+          "s3:GetObject",
           "s3:ListBucket"
 
         ]
